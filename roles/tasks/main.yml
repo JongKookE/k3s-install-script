@@ -1,0 +1,64 @@
+---
+# tasks file for roles
+- name: Update
+  apt:
+    update_cache: yes
+  tags:
+    - pre
+
+- name: Upgrade
+  apt:
+    upgrade: dist
+  tags:
+    - pre
+
+- name: Install Docker Package
+  apt:
+    name: docker.io
+    state: present
+  tags:
+    - docker
+
+- name: Install kubectl
+  shell: |
+    curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" &&
+    install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+  become: yes
+  tags: kubectl
+
+- name: Install k9s
+  shell: |
+    curl -sL  https://github.com/derailed/k9s/releases/download/v0.25.21/k9s_Linux_x86_64.tar.gz |
+    tar xfz - -C /usr/local/bin k9s
+  become: yes
+  tags: k9s
+
+# - name: Install k3s
+#   shell: |
+#     curl -sfL https://get.k3s.io | sh -
+#   become: yes
+#   tags: k3s
+
+- name: make .kube directory
+  file:
+    path: $HOME/.kube
+    state: directory
+    mode: 0755
+  tags: k3s
+
+- name: Change Owner Kube Config
+  file:
+    path: /etc/rancher/k3s/k3s.yaml
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: 0755
+  become: yes
+  tags: k3s
+
+- name: Copy Kube Config
+  copy:
+    src: /etc/rancher/k3s/k3s.yaml
+    dest: $HOME/.kube/config
+  tags: k3s
+
+
