@@ -1,16 +1,3 @@
-# - name: Playbook Test
-#   hosts: local
-#   become: yes
-#   connection: local
-#   tasks:
-#     - name: Update
-#       apt:
-#         update_cache: yes
-    
-#     - name: Upgrade
-#       apt:
-#         upgrade:
-
 - hosts: local
   connection: local
   roles:

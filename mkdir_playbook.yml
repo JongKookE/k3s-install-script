@@ -1,9 +1,0 @@
-- name: Test mkdir
-  hosts: local
-  connection: local
-  tasks:
-    - name: mkdir
-      file:
-        path: ~/asdasdasd
-        state: directory
-        mode: 0755

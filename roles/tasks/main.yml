@@ -1,5 +1,4 @@
 ---
-# tasks file for roles
 - name: Update
   apt:
     update_cache: yes
@@ -33,11 +32,11 @@
   become: yes
   tags: k9s
 
-# - name: Install k3s
-#   shell: |
-#     curl -sfL https://get.k3s.io | sh -
-#   become: yes
-#   tags: k3s
+- name: Install k3s
+  shell: |
+    curl -sfL https://get.k3s.io | sh -
+  become: yes
+  tags: k3s
 
 - name: make .kube directory
   file:
